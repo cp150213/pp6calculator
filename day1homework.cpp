@@ -22,6 +22,7 @@ double multiply( double a, double b)
   return a*b;
 }
 
+
 bool xintercept(double a, double b, double& c)
 {
   c = (0-b)/a;
@@ -47,6 +48,7 @@ double mass(double a, double b)
 {
   return sqrt(a*a - b*b);
 }
+
 
 void sort(double& a, double& b)
 {
@@ -81,8 +83,6 @@ double* bubble(double a, double b, double c, double d, double e)
   return f;
 }
 
-  
-
 void print(double a)
 {
   std::cout << "Result: " << a << std::endl;
@@ -109,7 +109,6 @@ int main()
   std::cout << "m : Find the invariant mass of two particles" << std::endl;
   std::cout << "s : Swap two numbers" << std::endl;
   std::cout << "b : Perform a bubble sort on an array of 5 numbers" << std::endl;
- 
 
   while(true){
     //Ask user to select operation
@@ -160,7 +159,6 @@ int main()
 	    std::cin.ignore(INT_MAX, '\n');
 	    continue;
 	  }
-
 
 	if (xintercept(a,b,c)) std::cout << "Everything has gone to hell, aka you tried to divide by 0" << std::endl;
 	else std::cout << c << std::endl;
@@ -243,7 +241,6 @@ int main()
 	continue;
       }
 	
-	
 
     // Finding the roots of a quadratic
     if(op == 'q')
@@ -288,6 +285,7 @@ int main()
 	    continue;
 	  }
 	// check to make sure we don't divide by zero
+
 	if (a == 0)
 	  {
 	    std::cerr << "For this to be a quadratic, you actually need an x^2 to appear, shall we try this again?" << std::endl;
@@ -296,13 +294,15 @@ int main()
 	else
 	  {
 	    // for real roots of x
+
 	    if (determ(a,b,c)>0){
 	      d = (-b + sqrt(determ(a,b,c)))/(4*a*c);
 	      e = (-b - sqrt(determ(a,b,c)))/(4*a*c);
 	      std::cout << "The roots of the equation are " << d << " and " << e << std::endl;
 	      continue;
 	    }
-	    // for when x has complex roots
+
+        // for when x has complex roots
 	    else if (determ(a,b,c)<0){
 	      d = sqrt(fabs(determ(a,b,c)));
 	      e = sqrt(fabs(determ(a,b,c)));
@@ -318,12 +318,14 @@ int main()
     // calculate the length of vectors
     if(op == 'l')
       {
-	// determine whether calculating length of 3 or 4 vectors
+
+      	// determine whether calculating length of 3 or 4 vectors
 	std::cout << "This program can find the length of a 3 or a 4 vector, enter the size of vector you would like the length of: " << std::endl;
 	int v;
 	std::cin >> v;
 	//check for error in input
 	if(!std::cin)
+
 	  {
 	    std::cerr << "Error in user input" << std::endl;
     
@@ -333,6 +335,7 @@ int main()
 	    continue;
 	  }
 	// for 3 vectors
+
 	if (v == 3)
 	  {
 	    std::cout << "Enter the value of the first component of the vector: " << std::endl;
@@ -348,6 +351,7 @@ int main()
 	      }
 	    std::cout << "Enter the value of the second component of the vector: " << std::endl;
 	    std::cin >> b;
+
 	    if(!std::cin)
 	      {
 		std::cerr << "Error in user input" << std::endl;
@@ -358,7 +362,8 @@ int main()
 		continue;
 	      }
 	    std::cout << "Enter the value of the third component of the vector: " << std::endl;
-	    std::cin >> c;
+
+	    std::cin >> c; 
 	    if(!std::cin)
 	      {
 		std::cerr << "Error in user input" << std::endl;
@@ -372,7 +377,9 @@ int main()
 	    std::cout << "The length of the vector (" << a << "," << b << "," << c << ") is " << d << std::endl;
 	    continue;
 	  }
-	// for 4 vectors
+
+	  // for 4 vectors
+
 	else if (v == 4)
 	  {
 	    std::cout << "Enter the value of the first component of the vector: " << std::endl;
@@ -387,7 +394,9 @@ int main()
 		continue;
 	      }
 	    std::cout << "Enter the value of the second component of the vector: " << std::endl;
-	    std::cin >> a;
+
+	    std::cin >> a; 
+
 	    if(!std::cin)
 	      {
 		std::cerr << "Error in user input" << std::endl;
@@ -398,7 +407,9 @@ int main()
 		continue;
 	      }
 	    std::cout << "Enter the value of the third component of the vector: " << std::endl;
-	    std::cin >> b;
+
+	    std::cin >> b; 
+
 	    if(!std::cin)
 	      {
 		std::cerr << "Error in user input" << std::endl;
@@ -409,7 +420,9 @@ int main()
 		continue;
 	      }
 	    std::cout << "Enter the value of the fourth component of the vector: " << std::endl;
-	    std::cin >> c;
+
+	    std::cin >> c; 
+
 	    if(!std::cin)
 	      {
 		std::cerr << "Error in user input" << std::endl;
@@ -423,8 +436,10 @@ int main()
 	    std::cout << "The length squared of the vector (" << t << "," << a << "," << b << "," << c << ") is " << d << std::endl;
 	    continue;
 	  }
-	// for the case where the user inputs invalid vector size
-	else
+
+	  // for the case where the user inputs invalid vector size
+	else 
+
 	  {
 	    std::cout << "Did I not just say your options were 3 or 4? Feel free to try again, if you must." << std::endl;
 	    continue;
@@ -494,7 +509,9 @@ int main()
 	    std::cout << "Particle 1: Particle energy must be greater than or equal to its momentum" << std::endl;
 	    continue;
 	  }
-	else
+
+	else 
+
 	  {
 	    c = mass(a,b);
 	    std::cout << "The invariant mass of the first particle is " << c << " MeV" << std::endl;
@@ -505,7 +522,9 @@ int main()
 	    std::cout << "Particle 2: Particle energy must be greater than or equal to its momentum" << std::endl;
 	    continue;
 	  }
-	else
+
+	else 
+
 	  {
 	    f = mass(d,e);
 	    std::cout << "The invariant mass of the second particle is " << f << " MeV" << std::endl;
@@ -542,10 +561,12 @@ int main()
 	continue;
       }
 
+
     else if(op=='s'){
       sort(a,b);
       std::cout << "a: " << a << " b: " << b << std::endl;
     }
+
 
     // addition
     else if(op=='+'){
