@@ -276,6 +276,7 @@ else if (day=='2')
 		}
 	}
 
+	//Produce a (user defined) number of random energies and 3 momenta and calculate mean energy and its standard deviation
 	else if (op == 'E')
 	{
 		int arraySize(0);

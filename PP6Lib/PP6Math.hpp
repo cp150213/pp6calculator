@@ -1,6 +1,7 @@
 #ifndef PP6CALCULATOR_PP6MATH_HH
 #define PP6CALCULATOR_PP6MATH_HH
 
+
 int add(double a, double b, double& result);
 
 int subtract(double a, double b, double& result);

@@ -4,7 +4,6 @@
 #include <cstdlib>
 #include "PP6Math.hpp"
 
-
 int add(double a, double b, double& result)
 {
 	result = a + b;
