@@ -22,18 +22,22 @@ double inv_mass(double E1, double px1, double py1, double pz1, double E2, double
 
 int swap(double& a, double& b);
 
+int swap(int& a, int& b);
+
 int bubble(double *arr, int size);
 
-double CalculateMean(double *arr, int size);
+int sumVectors(double *x, double *y, double *z, int size, double &sumX, double &sumY, double &sumZ);
 
-double CalculateVariance(double *arr, int size);
+int getMeanAndStdDev(double *x, int size, double& mean, double& stddev);
 
-double GetStandardDeviation(double *arr, int size);
+int associative_sort(double *arr, int *index, int size);
 
-double randEnergy(double *arr, int size, double& Emean, double& Estdev);
+double getRandom();
 
 void printArray(double *arr, int size);
 
 double getNumber();
+
+std::string getString();
 
 #endif // PP6CALCULATOR_PP6MATH_HH

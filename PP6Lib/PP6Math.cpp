@@ -106,6 +106,14 @@ int swap(double& a, double& b)
 	return 0;
 }
 
+int swap(int& a, int& b)
+{
+  int tmp(a);
+  a = b;
+  b = tmp;
+  return 0;
+}
+
 int bubble(double *arr, int size)
 {
 	bool done(true);
@@ -131,52 +139,93 @@ int bubble(double *arr, int size)
 	return 0;
 }
 
-double CalculateMean(double *arr, int size)
+double getRandom()
 {
-	double sum = 0;
-	for(int i = 0; i < size-1; i++)
-		sum += arr[i];
-	return (sum / size);
+  return rand() % 100;
 }
 
-double CalculateVariance(double *arr, int size)
+int getMeanAndStdDev(double *x, int size, double& mean, double& stddev)
 {
-	double mean = CalculateMean(arr, size);
+  // Check for valid pointer
+  if (!x) return 1;
 
-	double temp = 0;
-	for(int i = 0; i < size-1; i++)
-	{
-		temp += (arr[i] - mean) * (arr[i] - mean) ;
-	}
-	return temp / size;
+  // loop and compute mean
+  mean = 0;
+  for (int i(0); i < size; ++i)
+  {
+    mean += x[i];
+  }
+
+  mean /= size;
+
+  // now the standard deviation
+  stddev = 0;
+  for (int i(0); i < size; ++i)
+  {
+    stddev += (x[i] - mean) * (x[i] - mean);
+  }
+
+  stddev /= size;
+  stddev = sqrt(stddev);
+
+  return 0;
 }
 
-double GetStandardDeviation(double *arr, int size)
+
+int sumVectors(double *x, double *y, double *z, int size,
+               double &sumX, double &sumY, double &sumZ)
 {
-	return sqrt(CalculateVariance(arr, size));
+  // check for valid pointers
+  if ((!x) || (!y) || (!z))
+  {
+    return 1;
+  }
+
+  sumX = 0;
+  sumY = 0;
+  sumZ = 0;
+
+  for (int i(0); i < size; ++i)
+  {
+    sumX += x[i];
+    sumY += y[i];
+    sumZ += z[i];
+  }
+
+  return 0;
 }
 
-double randEnergy(double *arr, int size, double& Emean, double& Estdev)
+int associative_sort(double *arr, int *index, int size)
 {
-	
-	for(int i=0; i<size-1; i++)
-	{
-		double px = rand()%100;
-		double py = rand()%100;
-		double pz = rand()%100;
-		double m = rand()%100;
-		double momentum;
-		if (length3(px, py, pz, momentum))
-		{
-			return 1;
-		}
+  double *arr_t = new double[size];
+  for (int i(0); i < size; i++)
+  {
+    arr_t[i] = arr[i];
+  }
 
-		arr[i] = sqrt(momentum*momentum + m*m);
-	}
+  bool done(true);
 
-	Emean = CalculateMean(arr, size);
-	Estdev = GetStandardDeviation(arr,size);
-	return 0;
+  while (true)
+  {
+    done = true;
+
+    for (int i(0); i < size-1; ++i)
+    {
+      if (arr_t[i] < arr_t[i+1])
+      {
+        swap(index[i], index[i+1]);
+        swap(arr_t[i], arr_t[i+1]);
+        done = false;
+      }
+    }
+    if (done)
+    {
+      break;
+    }
+  }
+
+  delete [] arr_t;
+  return 0;
 }
 
 void printArray(double *arr, int size)
@@ -208,4 +257,25 @@ double getNumber()
 	}
 
 	return res;
+}
+
+std::string getString()
+{
+  std::string res;
+
+  std::cin >> res;
+
+  while (!std::cin)
+  {
+    std::cout << "Error in input. Please re-enter >> ";
+
+    // clear the buffer
+    std::cin.clear();
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    // retry
+    std::cin >> res;
+  }
+
+  return res;
 }
