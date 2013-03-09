@@ -29,6 +29,7 @@ int main()
   std::cout << "b : Perform a bubble sort on an array of 5 numbers" << std::endl;
   std::cout << "E : Generate random energies and 3 momenta and get the mean energy and its standard deviation" << std::endl;
   std::cout << "M : Analyse muons from file" << std::endl;
+  std::cout << "Day 3: " << std::endl;
   std::cout << "B : Boost a 4 vector along the z axis" << std::endl;
 
   while (true)
