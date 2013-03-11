@@ -1,6 +1,9 @@
 #ifndef PP6CALCULATOR_FOURVECTOR_HPP
 #define PP6CALCULATOR_FOURVECTOR_HPP
 
+#include <iosfwd>
+#include "ThreeVector.hpp"
+
 class FourVector {
 	public:
 
@@ -19,34 +22,41 @@ class FourVector {
 		FourVector& operator+=(const FourVector& rhs); 
 		FourVector& operator-=(const FourVector& rhs);
 
+		friend std::istream& operator>>(std::istream& in, FourVector& vec);
+
 		double interval() const { return s; } 
 
 		int boost(const double v); 
 	
 		double getT() const { return t; }
-		double getX() const { return x; }
-		double getY() const { return y; }
-		double getZ() const { return z; }
+		const ThreeVector& getThreeVector() const { return x; }
+		double getX() const { return x.getX(); }
+		double getY() const { return x.getY(); }
+		double getZ() const { return x.getZ(); }
 
-		void setT(const double t_) { t = t_; compute_interval(); }
-		void setX(const double x_) { x = x_; compute_interval(); }
-		void setY(const double y_) { y = y_; compute_interval(); }
-		void setZ(const double z_) { z = z_; compute_interval(); }
+		void setT(double t_);
+		void setThreeVector(const ThreeVector& x_);
+		void setX(const double x_);
+		void setY(const double y_);
+		void setZ(const double z_);
 	private:
 		static const double c;
 
 		double t;
-		double x;
-		double y;
-		double z;
+		ThreeVector x;
 		double s; 
 
 		void compute_interval();
 };
 
-std::istream& operator>>(std::istream& in, FourVector& vec); 
-std::ostream& operator<<(std::ostream& out, const FourVector& vec); 
-FourVector operator+(const FourVector& lhs, const FourVector& rhs); 
-FourVector operator-(const FourVector& lhs, const FourVector& rhs); 
+FourVector operator+(const FourVector& lhs, const FourVector& rhs);
+FourVector operator-(const FourVector& lhs, const FourVector& rhs);
+FourVector operator*(const FourVector& lhs, const double rhs);
+FourVector operator*(const double lhs, const FourVector& rhs);
+FourVector operator/(const FourVector& lhs, const double rhs);
+
+std::ostream& operator<<(std::ostream& out, const FourVector& vec);
+
+double contraction(const FourVector& lhs, const FourVector& rhs);
 
 #endif // PP6CALCULATOR_FOURVECTOR_HPP

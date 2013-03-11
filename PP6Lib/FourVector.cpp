@@ -1,9 +1,26 @@
 #include <cmath>
 #include <iostream>
 #include "FourVector.hpp"
+#include "ThreeVector.hpp"
 
 
-const double FourVector::c(2.998E8);
+const double FourVector::c(1);
+
+FourVector::FourVector()
+	: t(0.0), x(), s(0.0)
+{
+}
+
+FourVector::FourVector(const FourVector& other)
+	: t(other.getT()), x(other.getThreeVector()), s(other.interval())
+{
+}
+
+FourVector::FourVector(const double t_, const ThreeVector& x_)
+	: t(t_), x(x_)
+{
+	compute_interval();
+}
 
 FourVector& FourVector::operator=(const FourVector& other)
 {
@@ -69,10 +86,26 @@ FourVector operator-(const FourVector& lhs, const FourVector& rhs)
 	return temp;
 }
 
+FourVector& FourVector::operator*=(const double rhs)
+{
+	t *= rhs;
+	x *= rhs;
+	compute_interval();
+	return *this;
+}
+
+FourVector& FourVector::operator/=(const double rhs)
+{
+	t /= rhs;
+	x /= rhs;
+	compute_interval();
+	return *this;
+}
+
 void FourVector::compute_interval() 
 {
 	//interval s squared = (ct)^2 - (x^2 + y^2 + z^2)
-	s = c*c*t*t - (x*x + y*y + z*z);
+	s = c*c*t*t - x.length() * x.length();
 }
 
 int FourVector::boost(const double v)
@@ -80,15 +113,67 @@ int FourVector::boost(const double v)
 
 	if ( v >= c ) 
 	{
-		return 1; 
+		return -1; 
 	}
 
 	double gamma = 1.0 / sqrt(1.0 - (v * v)/(c*c));
-	double t_ = gamma * (t - ((v * v)/(c*c))*z);
-	double z_ = gamma * (z - ((v * v)/(c*c))*t);
+	double t_ = gamma * (t - ((v * v)/(c*c))*x.getZ());
+	double z_ = gamma * (x.getZ() - ((v * v)/(c*c))*t);
 
 	t = t_;
-	z = z_;
+	x.setZ(z_);
 
 	return 0; 
+}
+
+FourVector operator+(const FourVector& lhs, const FourVector& rhs)
+{
+	FourVector temp(lhs);
+	temp += rhs;
+	return temp;
+}
+
+FourVector operator-(const FourVector& lhs, const FourVector& rhs)
+{
+	FourVector temp(lhs);
+	temp -= rhs;
+	return temp;
+}
+
+FourVector operator*(const FourVector& lhs, const double rhs)
+{
+	FourVector temp(lhs);
+	temp *= rhs;
+	return temp;
+}
+
+FourVector operator*(const double lhs, const FourVector& rhs)
+{
+	FourVector temp(rhs);
+	temp *= lhs;
+	return temp;
+}
+
+FourVector operator/(const FourVector& lhs, const double rhs)
+{
+	FourVector temp(lhs);
+	temp /= rhs;
+	return temp;
+}
+
+std::ostream& operator<<(std::ostream& out, const FourVector& vec)
+{
+	out << "[" << vec.getT() << ", " << vec.getThreeVector() << "]";
+	return out;
+}
+
+std::istream& operator>>(std::istream& in, FourVector& vec)
+{
+	in >> vec.t >> vec.x;
+	return in;
+}
+
+double contraction(const FourVector& lhs, const FourVector& rhs)
+{
+	return lhs.getT() * rhs.getT() - lhs.getThreeVector().length() * rhs.getThreeVector().length();
 }
