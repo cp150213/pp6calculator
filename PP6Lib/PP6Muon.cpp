@@ -4,6 +4,7 @@
 #include "FileReader.hpp"
 #include "PP6Muon.hpp"
 #include "PP6Math.hpp"
+#include <string>
 
 //! Count number of muons and antimuons in run file with specific run tag
 int countMuons(const std::string& inputFile, const std::string& runName,
@@ -26,10 +27,10 @@ int countMuons(const std::string& inputFile, const std::string& runName,
   while (counter.nextLine()) {
     // Valid lines should begin with an integer, continue without error
     // to skip header
-    counter.getFieldAsInt(1);
+    counter.getField<int>(1);
     if (counter.inputFailed()) continue;
 
-    particleName = counter.getFieldAsString(2);
+    particleName = counter.getField<std::string>(2);
     if (counter.inputFailed()) {
       std::cerr << "[countMuonPairs:error] Field 2 of "
                 << inputFile
@@ -38,7 +39,7 @@ int countMuons(const std::string& inputFile, const std::string& runName,
       return 1;
     }
 
-    dataID = counter.getFieldAsString(6);
+    dataID = counter.getField<std::string>(6);
     if (counter.inputFailed()) {
       std::cerr << "[countMuonPairs:error] Field 6 of "
                 << inputFile
@@ -104,10 +105,10 @@ int PP6Muon() {
   while (muonReader.nextLine()) {
      // Valid lines should begin with an integer, continue without error
     // to skip header
-    eventNumber = muonReader.getFieldAsInt(1);
+    eventNumber = muonReader.getField<int>(1);
     if (muonReader.inputFailed()) continue;
 
-    particleName = muonReader.getFieldAsString(2);
+    particleName = muonReader.getField<std::string>(2);
     if (muonReader.inputFailed()) {
       std::cerr << "[PP6Muon:error] Field 2 of "
                 << muonFile
@@ -116,7 +117,7 @@ int PP6Muon() {
       break;
     }
 
-    dataID = muonReader.getFieldAsString(6);
+    dataID = muonReader.getField<std::string>(6);
     if (muonReader.inputFailed()) {
       std::cerr << "[PP6Muon:error] Field 6 of "
                 << muonFile
@@ -127,7 +128,7 @@ int PP6Muon() {
 
     if (dataID == runID) {
       // Read the physics data
-      particlePx = muonReader.getFieldAsDouble(3);
+      particlePx = muonReader.getField<double>(3);
       if (muonReader.inputFailed()) {
       std::cerr << "[PP6Muon:error] Field 3 of "
                 << muonFile
@@ -136,7 +137,7 @@ int PP6Muon() {
       break;
       }
 
-      particlePy = muonReader.getFieldAsDouble(4);
+      particlePy = muonReader.getField<double>(4);
       if (muonReader.inputFailed()) {
       std::cerr << "[PP6Muon:error] Field 4 of "
                 << muonFile
@@ -145,7 +146,7 @@ int PP6Muon() {
       break;
       }
 
-      particlePz = muonReader.getFieldAsDouble(5);
+      particlePz = muonReader.getField<double>(5);
       if (muonReader.inputFailed()) {
       std::cerr << "[PP6Muon:error] Field 5 of "
                 << muonFile
