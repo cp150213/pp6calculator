@@ -1,62 +1,113 @@
-#ifndef PP6CALCULATOR_FOURVECTOR_HPP
-#define PP6CALCULATOR_FOURVECTOR_HPP
 
-#include <iosfwd>
+#ifndef PP6CALCULATOR_FOURVECTOR_HH
+#define PP6CALCULATOR_FOURVECTOR_HH
+
+// Standard Library
+#include <string>
+
+// This project
 #include "ThreeVector.hpp"
 
+//! FourVector class
 class FourVector {
-	public:
+ public: // we can use access specifiers as many times as we like
+         // it's usually best to use this to break things up by
+         // function, e.g. constants/typedefs first, then member functions
+         // then member variables
+  //! Default constructor
+  FourVector();
 
-		FourVector() {t=0;x=0;y=0;z=0;}
+  //! Copy Constructor
+  FourVector(const FourVector& other);
 
-		FourVector(const FourVector& other) 
-			: t(other.getT()), x(other.getX()), y(other.getY()), z(other.getZ()), s(other.interval())
-			{ }
+  //! Constructor with values
+  FourVector(const double t, const double x, const double y, const double z);
+  FourVector(const double t, const ThreeVector& v);
 
-		FourVector(const double t_, const double x_, const double y_, const double z_)
-			: t(t_), x(x_), y(y_), z(z_)
-			{ compute_interval(); }
 
-		FourVector& operator=(const FourVector& other); 
-		
-		FourVector& operator+=(const FourVector& rhs); 
-		FourVector& operator-=(const FourVector& rhs);
 
-		friend std::istream& operator>>(std::istream& in, FourVector& vec);
+  //! Copy-assignment operator
+  FourVector& operator=(const FourVector& other);
+  
+  //! Add a vector to this one
+  FourVector& operator+=(const FourVector& rhs);
 
-		double interval() const { return s; } 
+  //! Subtract a vector from this one
+  FourVector& operator-=(const FourVector& rhs);
 
-		int boost(const double v); 
-	
-		double getT() const { return t; }
-		const ThreeVector& getThreeVector() const { return x; }
-		double getX() const { return x.getX(); }
-		double getY() const { return x.getY(); }
-		double getZ() const { return x.getZ(); }
+  //! Multiply components of this vector by a constant
+  FourVector& operator*=(const double rhs);
+  
+  //! Divide components of this vector by a constant
+  FourVector& operator/=(const double rhs);
 
-		void setT(double t_);
-		void setThreeVector(const ThreeVector& x_);
-		void setX(const double x_);
-		void setY(const double y_);
-		void setZ(const double z_);
-	private:
-		static const double c;
+  //! return the interval of the vector
+  double interval() const;
 
-		double t;
-		ThreeVector x;
-		double s; 
+  //! boost the vector along the z-axis [1]
+  int boost(const double velocity);
 
-		void compute_interval();
+  //! return a string representation of this vector
+  std::string asString() const;
+
+  //! get t, x, y, z components of vector
+  double getT() const {return t_;}
+  const ThreeVector& getThreeVector() const {return x_;}
+  double getX() const {return x_.getX();}
+  double getY() const {return x_.getY();}
+  double getZ() const {return x_.getZ();}
+
+  //! set t, x, y, z components of vector
+  void setT(const double t);
+  void setThreeVector(const ThreeVector& v);
+  void setX(const double x);
+  void setY(const double y);
+  void setZ(const double z);
+
+ private:
+  //! constants, but only needed internally to FourVector
+  static const double c;
+ private:
+  //! recompute interval whenever components change
+  void compute_interval();
+ private:
+  //! member variables
+  double t_;
+  ThreeVector x_;
+  double s_; // current interval
 };
 
+/*
+* [1] There are several design choices here, boost_z could be:
+* - a const member function, returning a boosted copy of the original
+* - a non-const member function, modifying the original (as shown)
+* - a free function taking a const FourVector and returning a boosted copy
+* - a free function taking a ref. to a FourVector and boosting it
+*/
+
+// We can keep the following free functions simply for convenience
+
+//! Default Create a new FourVector instance
+FourVector* createFourVector();
+
+//! Create a new FourVector instance with components
+FourVector* createFourVector(const double t, const double x, const double y,
+                             const double z);
+
+//! Destroy a FourVector instance, nulling the supplied pointer
+void destroyFourVector(FourVector *&p);
+
+//! Free I/O streaming operators
+std::istream& operator>>(std::istream& in, FourVector& vec);
+std::ostream& operator<<(std::ostream& out, const FourVector& vec);
+
+//! Free arithmetic operators
 FourVector operator+(const FourVector& lhs, const FourVector& rhs);
 FourVector operator-(const FourVector& lhs, const FourVector& rhs);
 FourVector operator*(const FourVector& lhs, const double rhs);
 FourVector operator*(const double lhs, const FourVector& rhs);
 FourVector operator/(const FourVector& lhs, const double rhs);
 
-std::ostream& operator<<(std::ostream& out, const FourVector& vec);
-
 double contraction(const FourVector& lhs, const FourVector& rhs);
 
-#endif // PP6CALCULATOR_FOURVECTOR_HPP
+#endif // PP6FOURVECTOR_HH

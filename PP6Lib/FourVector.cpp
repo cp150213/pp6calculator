@@ -1,179 +1,222 @@
-#include <cmath>
-#include <iostream>
 #include "FourVector.hpp"
-#include "ThreeVector.hpp"
-
+#include <cmath>
+#include <sstream>
 
 const double FourVector::c(1);
 
-FourVector::FourVector()
-	: t(0.0), x(), s(0.0)
-{
-}
+FourVector::FourVector() : t_(0.0), x_(), s_(0.0)
+{}
 
 FourVector::FourVector(const FourVector& other)
-	: t(other.getT()), x(other.getThreeVector()), s(other.interval())
+  : t_(other.getT()), x_(other.getThreeVector()), s_(other.interval())
+{}
+
+FourVector::FourVector(const double t, const double x, const double y, const double z) : t_(t), x_(x, y, z)
 {
+  compute_interval();
 }
 
-FourVector::FourVector(const double t_, const ThreeVector& x_)
-	: t(t_), x(x_)
+FourVector::FourVector(const double t, const ThreeVector& x) : t_(t), x_(x)
 {
-	compute_interval();
+  compute_interval();
 }
+
+//----------------------------------------------------------------------
+// Member operators
 
 FourVector& FourVector::operator=(const FourVector& other)
 {
-	if ( this != &other ) 
-	{
-		t = other.getT();
-		x = other.getX();
-		y = other.getY();
-		z = other.getZ();
-		s = other.interval();
-	}
-	return *this;
-}
-
-std::istream& operator>>(std::istream& in, FourVector& vec) 
-{
-	double x(0.0), y(0.0), z(0.0), t(0.0);
-	in >> t >> x >> y >> z;
-	vec.setT(t);
-	vec.setX(x);
-	vec.setY(y);
-	vec.setZ(z);
-	return in;
-}
-
-std::ostream& operator<<(std::ostream& out, const FourVector& vec)
-{
-	out << "(" << vec.getT() << ", " << vec.getX() << ", " << vec.getY() << ", " << vec.getZ() << ")";
-	return out;
+  if ( this != &other ) // Ignore attempts at self-assignment
+  {
+    t_ = other.getT();
+    x_ = other.getThreeVector();
+    s_ = other.interval();
+  }
+  return *this;
 }
 
 FourVector& FourVector::operator+=(const FourVector& rhs)
 {
-	t += rhs.getT();
-	x += rhs.getX();
-	y += rhs.getY();
-	z += rhs.getZ();
-		compute_interval();
-	return *this;
+  t_ += rhs.getT();
+  x_ += rhs.getThreeVector();
+  compute_interval();
+  return *this;
 }
 
 FourVector& FourVector::operator-=(const FourVector& rhs)
 {
-	t -= rhs.getT();
-	x -= rhs.getX();
-	y -= rhs.getY();
-	z -= rhs.getZ();
-		compute_interval();
-	return *this;
-}
-
-FourVector operator+(const FourVector& lhs, const FourVector& rhs)
-{
-	FourVector temp(lhs);
-	temp += rhs;
-	return temp;
-}
-
-FourVector operator-(const FourVector& lhs, const FourVector& rhs)
-{
-	FourVector temp(lhs);
-	temp -= rhs;
-	return temp;
+  t_ -= rhs.getT();
+  x_ -= rhs.getThreeVector();
+  compute_interval();
+  return *this;
 }
 
 FourVector& FourVector::operator*=(const double rhs)
 {
-	t *= rhs;
-	x *= rhs;
-	compute_interval();
-	return *this;
+  t_ *= rhs;
+  x_ *= rhs;
+  compute_interval();
+  return *this;
 }
 
 FourVector& FourVector::operator/=(const double rhs)
 {
-	t /= rhs;
-	x /= rhs;
-	compute_interval();
-	return *this;
+  t_ /= rhs;
+  x_ /= rhs;
+  compute_interval();
+  return *this;
 }
 
-void FourVector::compute_interval() 
+//----------------------------------------------------------------------
+// Member functions
+void FourVector::setT(double t)
 {
-	//interval s squared = (ct)^2 - (x^2 + y^2 + z^2)
-	s = c*c*t*t - x.length() * x.length();
+  t_ = t;
+  compute_interval();
 }
 
-int FourVector::boost(const double v)
+void FourVector::setThreeVector(const ThreeVector& v)
 {
-
-	if ( v >= c ) 
-	{
-		return -1; 
-	}
-
-	double gamma = 1.0 / sqrt(1.0 - (v * v)/(c*c));
-	double t_ = gamma * (t - ((v * v)/(c*c))*x.getZ());
-	double z_ = gamma * (x.getZ() - ((v * v)/(c*c))*t);
-
-	t = t_;
-	x.setZ(z_);
-
-	return 0; 
+  x_ = v;
+  compute_interval();
 }
 
-FourVector operator+(const FourVector& lhs, const FourVector& rhs)
+void FourVector::setX(const double x)
 {
-	FourVector temp(lhs);
-	temp += rhs;
-	return temp;
+  x_.setX(x);
 }
 
-FourVector operator-(const FourVector& lhs, const FourVector& rhs)
+void FourVector::setY(const double y)
 {
-	FourVector temp(lhs);
-	temp -= rhs;
-	return temp;
+  x_.setY(y);
 }
 
-FourVector operator*(const FourVector& lhs, const double rhs)
+void FourVector::setZ(const double z)
 {
-	FourVector temp(lhs);
-	temp *= rhs;
-	return temp;
+  x_.setZ(z);
 }
 
-FourVector operator*(const double lhs, const FourVector& rhs)
+double FourVector::interval() const
 {
-	FourVector temp(rhs);
-	temp *= lhs;
-	return temp;
+  return s_;
 }
 
-FourVector operator/(const FourVector& lhs, const double rhs)
+int FourVector::boost(const double velocity)
 {
-	FourVector temp(lhs);
-	temp /= rhs;
-	return temp;
+  if ( velocity >= c ) // Cannot boost faster than speed of light
+  {
+    return 1; // Indicate error
+  }
+
+  // Boost along z direction
+  // x and y remain unchanged
+  
+  // Calculate Lorentz factor
+  double gamma = 1.0 / sqrt(1.0 - velocity * velocity / (c*c));
+  
+  // Apply boost in z direction - need temp variables due to mixing
+  double z_prime = gamma * ( x_.getZ() - velocity * t_);
+  double t_prime = gamma * ( t_ - velocity * x_.getZ() /(c*c));
+  x_.setZ(z_prime);
+  t_ = t_prime;
+
+  return 0; // Indicate success
+}
+
+std::string FourVector::asString() const
+{
+  std::ostringstream s;
+  s << *this;
+  return s.str();
+}
+
+void FourVector::compute_interval()
+{
+  // interval s^2 = (ct)^2 - (x^2 + y^2 + z^2)
+  s_ = c*c*t_*t_ - x_.length()*x_.length();
+}
+
+
+//----------------------------------------------------------------------
+// Free functions - we can retain these for convenience!
+
+//! Default Create a new FourVector instance
+FourVector* createFourVector() {
+  return new FourVector;
+}
+
+//! Create a new FourVector instance with components
+FourVector* createFourVector(const double t, const double x, const double y,
+                             const double z) {
+  FourVector *p = new FourVector(t, x, y, z);
+  return p;
+}
+
+//! Destroy a FourVector instance, nulling the supplied pointer
+void destroyFourVector(FourVector *&p) {
+  if (p)
+  {
+    delete p;
+    p = 0;
+  }
+}
+
+//----------------------------------------------------------------------
+// Free operators
+
+std::istream& operator>>(std::istream& in, FourVector& vec) // Could also be a friend function [1]
+{
+  double x(0.0), y(0.0), z(0.0), t(0.0);
+  in >> t >> x >> y >> z;
+  vec.setT(t);
+  vec.setX(x);
+  vec.setY(y);
+  vec.setZ(z);
+  return in;
 }
 
 std::ostream& operator<<(std::ostream& out, const FourVector& vec)
 {
-	out << "[" << vec.getT() << ", " << vec.getThreeVector() << "]";
-	return out;
+  out << "(" << vec.getT() << ", " << vec.getThreeVector() << ")";
+  return out;
 }
 
-std::istream& operator>>(std::istream& in, FourVector& vec)
+FourVector operator+(const FourVector& lhs, const FourVector& rhs)
 {
-	in >> vec.t >> vec.x;
-	return in;
+  FourVector temp(lhs);
+  temp += rhs;
+  return temp;
+}
+
+FourVector operator-(const FourVector& lhs, const FourVector& rhs)
+{
+  FourVector temp(lhs);
+  temp -= rhs;
+  return temp;
+}
+
+FourVector operator*(const FourVector& lhs, const double rhs)
+{
+  FourVector temp(lhs);
+  temp *= rhs;
+  return temp;
+}
+
+FourVector operator*(const double lhs, const FourVector& rhs)
+{
+  FourVector temp(rhs);
+  temp *= lhs;
+  return temp;
+}
+
+FourVector operator/(const FourVector& lhs, const double rhs)
+{
+  FourVector temp(lhs);
+  temp /= rhs;
+  return temp;
 }
 
 double contraction(const FourVector& lhs, const FourVector& rhs)
 {
-	return lhs.getT() * rhs.getT() - lhs.getThreeVector().length() * rhs.getThreeVector().length();
+  return lhs.getT() * rhs.getT() - lhs.getThreeVector().length() * rhs.getThreeVector().length();
 }
