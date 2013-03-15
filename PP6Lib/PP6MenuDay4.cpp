@@ -178,14 +178,12 @@ void pp6MenuDay4() {
 	while (true)
 	{
 
-		std::cout << "PP6Calculator - Day 4 Menu" << std::endl;
-		std::cout << "==========================" << std::endl;
 		std::cout << "Enter the operation you would like to perform:" << std::endl;
-		std::cout << "1) Read and display the PDG Textfile Database" << std::endl;
+		std::cout << "1) Read in the pdg database file and display data to terminal" << std::endl;
 std::cout << "2) Instantiate a ParticleInfo instance and test it" << std::endl;
-std::cout << "3) Demonstrate use of STL algorithms to sort a random array" << std::endl;
-std::cout << "4) Analyse input file for muon pairs (Day 4 version)" << std::endl;
-std::cout << "q) Quit" << std::endl;
+std::cout << "3) Sort an array" << std::endl;
+std::cout << "4) Analyse muons from file, day 4 style" << std::endl;
+std::cout << "Or type Q to quit" << std::endl;
 std::cout << ">> ";
 
 std::cin >> op;

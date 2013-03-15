@@ -17,7 +17,12 @@ void pp6MenuDay2()
 	while (true)
 	{
 		{
-			std::cout << "Enter the operation you would like to perform (s, b, E, M), or type Q to quit:" << std::endl;
+			std::cout << "Enter the operation you would like to perform:" << std::endl;
+			std::cout << "1) : Swap two numbers" << std::endl;
+	std::cout << "2) : Perform a bubble sort on an array of 5 numbers" << std::endl;
+	std::cout << "3) : Generate random energies and 3 momenta and get the mean energy and its standard deviation" << std::endl;
+	std::cout << "4) : Analyse muons from file" << std::endl;
+	std::cout << "Or type Q to quit." << std::endl;
 
 			std::cin >> op;
 
@@ -38,7 +43,7 @@ void pp6MenuDay2()
 				break;
 			}
 
-			else if (op == 's')
+			else if (op == '1')
 			{
 				std::cout << "Enter the first number: ";
 				a = getNumber();
@@ -50,7 +55,7 @@ void pp6MenuDay2()
 				continue;
 			}
 
-			else if (op == 'b')
+			else if (op == '2')
 			{
 				int arraySize(0);
 				std::cout << "Enter the size of the array: ";
@@ -81,12 +86,12 @@ void pp6MenuDay2()
 			}
 
 	  //Produce a (user defined) number of random energies and 3 momenta and calculate mean energy and its standard deviation
-			else if (op == 'E')
+			else if (op == '3')
 			{
 				resultCode = PP6Energy();
 				continue;
 			}
-			else if (op == 'M')
+			else if (op == '4')
 			{
 				resultCode = PP6Muon();
 				continue;

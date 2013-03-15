@@ -12,7 +12,7 @@ int main()
   // Declare the variables
 	char day(0);
 
-	std::cout << "This program can perform a number of operations on user specified numbers. The available operations are: " << std::endl;
+	/*std::cout << "This program can perform a number of operations on user specified numbers. The available operations are: " << std::endl;
 	std::cout << "Day 1: " << std::endl;
 	std::cout << "+ : Addition" << "\t" << "- : Subtraction" << std::endl;
 	std::cout << "/ : Division" << "\t" << "* : Multiplication" << std::endl;
@@ -26,15 +26,16 @@ int main()
 	std::cout << "E : Generate random energies and 3 momenta and get the mean energy and its standard deviation" << std::endl;
 	std::cout << "M : Analyse muons from file" << std::endl;
 	std::cout << "Day 3: " << std::endl;
-	std::cout << "B : Boost a 4 vector along the z axis" << std::endl;
+	std::cout << "B : Boost a 4 vector along the z axis" << std::endl;*/
 
 	while (true)
 	{
       // Ask the user what they want to do
-		std::cout << "Please enter the number for the days operations that you would like to perform? " << std::endl;
-		std::cout << "1) Day 1" << std::endl;
-std::cout << "2) Day 2" << std::endl;
-std::cout << "3) Day 3" << std::endl;
+		std::cout << "Please enter the number of the day whose operations you would like to perform? " << std::endl;
+		std::cout << "1) Day 1 - Basic operations" << std::endl;
+std::cout << "2) Day 2 - Array operations" << std::endl;
+std::cout << "3) Day 3 - 4 vector boost" << std::endl;
+std::cout << "4) Day 4 - STL operations";
 std::cout << "Or type Q to quit" << std::endl;
 std::cin >> day;
 

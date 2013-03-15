@@ -15,7 +15,14 @@ void pp6MenuDay1()
 
 	while (true)
 	{
-		std::cout << "Enter the operation you would like to perform (+, -, *, /, x, q, l, m), or type Q to quit:" << std::endl;
+		std::cout << "Enter the operation you would like to perform: " << std::endl;
+		std::cout << "1) : Addition" << "\t" << "2) : Subtraction" << std::endl;
+	std::cout << "3) : Division" << "\t" << "4) : Multiplication" << std::endl;
+	std::cout << "5) : Find the x intercept of a straight line of form y = mx + c" << std::endl;
+	std::cout << "6) : Find the roots of a quadratic equation" << std::endl;
+	std::cout << "7) : Find the length of a vector" << std::endl;
+	std::cout << "8) : Find the invariant mass of two particles" << std::endl;
+	std::cout << "Or type Q to quit" << std::endl;
 
 		std::cin >> op;
 
@@ -35,7 +42,7 @@ void pp6MenuDay1()
 		{
 			break;
 		}
-		else if((op == '+') || (op == '-') || (op == '*') || (op == '/'))
+		else if((op == '1') || (op == '2') || (op == '4') || (op == '3'))
 		{
 	      // Arithmetic operations, so ask for two numbers from the user
 			std::cout << "Enter the first number: ";
@@ -44,25 +51,25 @@ void pp6MenuDay1()
 			b = getNumber();
 
 	      // calculate the result
-			if (op == '+')
+			if (op == '1')
 			{
 				resultCode = add(a, b, answerHolder);
 			}
-			else if (op == '-')
+			else if (op == '2')
 			{
 				resultCode = subtract(a, b, answerHolder);
 			}
-			else if (op == '*')
+			else if (op == '4')
 			{
 				resultCode = multiply(a, b, answerHolder);
 			}
-			else if (op == '/')
+			else if (op == '3')
 			{
 				resultCode = divide(a, b, answerHolder);
 			}
 
 		}
-		else if (op == 'x')
+		else if (op == '5')
 		{
 	      // Ask for two numbers from the user
 			std::cout << "Enter the gradient: ";
@@ -71,7 +78,7 @@ void pp6MenuDay1()
 			b = getNumber();
 			resultCode = intercept(a, b, answerHolder);
 		}
-		else if (op == 'q')
+		else if (op == '6')
 		{
 	      // Solve ax^2 + bx + c = 0
 	      // Ask user for quadratic coefficients
@@ -84,7 +91,7 @@ void pp6MenuDay1()
 
 			resultCode = quadratic(a, b, c, answerHolder, answerHolder2);
 		}
-		else if (op == 'l')
+		else if (op == '7')
 		{
 			std::cout << "This program can find the length of a 3 or a 4 vector, enter the size of vector you would like the length of: " << std::endl;
 			int v;
@@ -124,7 +131,7 @@ void pp6MenuDay1()
 			else std::cout << "I said a 3 or a 4 vector, what do you think you're doing?" << std::endl;
 		}
 
-		else if (op == 'm')
+		else if (op == '8')
 		{
 			double E1(0), px1(0), py1(0), pz1(0), E2(0), px2(0), py2(0), pz2(0);
 
@@ -164,7 +171,7 @@ void pp6MenuDay1()
 		}
 
 	  // if all is well, print the result(s)
-		if (op == 'q')
+		if (op == '6')
 		{
 			std::cout << "[result]: first root: " << answerHolder << std::endl;
 			std::cout << "[result]: second root: " << answerHolder2 << std::endl;
