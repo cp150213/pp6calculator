@@ -4,56 +4,63 @@
 #include <iosfwd> 
 
 class ThreeVector {
-	public:
-		// Constructors
-		ThreeVector();
-		ThreeVector(const ThreeVector& other);
-		ThreeVector(double x_, double y_, double z_);
+public:
+  // Constructors
+  ThreeVector();
+  ThreeVector(const ThreeVector& other);
+  ThreeVector(double x_, double y_, double z_);
 
-		// Copy assignment operator
-		ThreeVector& operator=(const ThreeVector& other);
+  // Copy assignment operator
+  ThreeVector& operator=(const ThreeVector& other);
 
-		// Member operators
-		ThreeVector& operator+=(const ThreeVector& rhs);
-		ThreeVector& operator-=(const ThreeVector& rhs);
-		ThreeVector& operator*=(const double rhs);
-		ThreeVector& operator/=(const double rhs);
+  // Member operators
+  ThreeVector& operator+=(const ThreeVector& rhs);
+  ThreeVector& operator-=(const ThreeVector& rhs);
+  ThreeVector& operator*=(const double rhs);
+  ThreeVector& operator/=(const double rhs);
 	
-		// Friend operators
-		friend std::istream& operator>>(std::istream& in, ThreeVector& vec);
+  // Friend operators
+  friend std::istream& operator>>(std::istream& in, ThreeVector& vec);
 
-		// Accessors / setters
-		double getX() const { return x; }
-		double getY() const { return y; }
-		double getZ() const { return z; }
+  // Accessors / setters
+  double getX() const { return x; }
+  double getY() const { return y; }
+  double getZ() const { return z; }
 
-		void setX(const double x_);
-		void setY(const double y_);
-		void setZ(const double z_);
+  void setX(const double x_);
+  void setY(const double y_);
+  void setZ(const double z_);
 
-		double getR() const { return len; }
-		double getTheta() const;
-		double getPhi() const;
+  double getR() const { return len; }
+  double getTheta() const;
+  double getPhi() const;
 
-		void setR(const double r);
-		void setTheta(const double theta);
-		void setPhi(const double phi);
+  void rotateX(const double angle);
 
-		// Member functions
-		double length() const { return len; }
+  void rotateY(const double angle);
 
-		// statics
-		static const double Pi;
+  void rotateZ(const double angle);
 
-	private:
-		// Private member functions
-		void compute_length();
+
+  void setR(const double r);
+  void setTheta(const double theta);
+  void setPhi(const double phi);
+
+  // Member functions
+  double length() const { return len; }
+
+  // statics
+  static const double Pi;
+
+private:
+  // Private member functions
+  void compute_length();
 		
-		// Member variables
-		double x;
-		double y;
-		double z;
-		double len;
+  // Member variables
+  double x;
+  double y;
+  double z;
+  double len;
 
 };
 
